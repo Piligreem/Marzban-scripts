@@ -535,9 +535,9 @@ backup_command() {
         db_type="mysql"
         container_name=$(docker compose -f "$COMPOSE_FILE" ps -q mysql || echo "mysql")
 
-    elif grep -q "SQLALCHEMY_DATABASE_URL = .*sqlite" "$ENV_FILE"; then
+    elif grep -q "SQLALCHEMY_DATABASE_URL=.*sqlite" "$ENV_FILE"; then
         db_type="sqlite"
-        sqlite_file=$(grep -Po '(?<=SQLALCHEMY_DATABASE_URL = "sqlite:////).*"' "$ENV_FILE" | tr -d '"')
+        sqlite_file=$(grep -Po '(?<=SQLALCHEMY_DATABASE_URL="sqlite:////).*"' "$ENV_FILE" | tr -d '"')
         if [[ ! "$sqlite_file" =~ ^/ ]]; then
             sqlite_file="/$sqlite_file"
         fi
@@ -780,7 +780,7 @@ EOF
         curl -sL "$FILES_URL_PREFIX/.env.example" -o "$APP_DIR/.env"
 
         # Comment out the SQLite line
-        sed -i 's~^\(SQLALCHEMY_DATABASE_URL = "sqlite:////var/lib/marzban/db.sqlite3"\)~#\1~' "$APP_DIR/.env"
+        sed -i 's~^\(SQLALCHEMY_DATABASE_URL="sqlite:////var/lib/marzban/db.sqlite3"\)~#\1~' "$APP_DIR/.env"
 
 
         # Add the MySQL connection string
